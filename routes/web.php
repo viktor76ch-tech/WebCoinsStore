@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CoinController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,8 +18,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->name('admin.')
@@ -28,3 +27,7 @@ Route::middleware(['auth', 'admin'])
         })->name('dashboard');
     });
 
+Route::get('/coins', [CoinController::class, 'index'])->name('coins.index');
+Route::get('/coins/{coin}', [CoinController::class, 'show'])->name('coins.show');
+
+require __DIR__.'/auth.php';
