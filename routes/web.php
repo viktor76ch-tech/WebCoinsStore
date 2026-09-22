@@ -5,8 +5,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CoinController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $coins = \App\Models\Coin::query()
+        ->where('status', 'available')
+        ->orderByDesc('created_at')
+        ->limit(4)
+        ->get();
+
+    return view('home', compact('coins'));
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
