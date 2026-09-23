@@ -117,28 +117,41 @@ class DatabaseSeeder extends Seeder
         }
 
         // Заказы
-        Order::create([
+        $order1 = Order::create([
             'user_id' => $user->id,
+            'number' => Order::generateNumber(),
+            'total_price' => 12500.00,
+            'status' => 'paid',
+            'payment_method' => 'mock',
+            'payment_status' => 'paid',
+            'payment_ref' => 'MOCK-' . strtoupper(uniqid()),
+            'customer_name' => $user->name,
+            'phone' => '+7 900 000-00-00',
+            'delivery_address' => 'г. Москва, ул. Пример, д. 1, кв. 1',
+            'paid_at' => now(),
+        ]);
+
+        $order1->items()->create([
             'coin_id' => 1,
-            'title' => 'Заказ на 1 рубль 1898 года',
-            'description' => 'Прошу забронировать на 2 дня.',
-            'status' => 'new',
+            'quantity' => 1,
+            'price' => 12500.00,
         ]);
 
-        Order::create([
+        $order2 = Order::create([
             'user_id' => $user->id,
+            'number' => Order::generateNumber(),
+            'total_price' => 3200.00,
+            'status' => 'pending_payment',
+            'payment_status' => 'unpaid',
+            'customer_name' => $user->name,
+            'phone' => '+7 900 000-00-00',
+            'delivery_address' => 'г. Москва, ул. Пример, д. 1, кв. 1',
+        ]);
+
+        $order2->items()->create([
             'coin_id' => 2,
-            'title' => 'Заказ на 5 копеек 1789 года',
-            'description' => null,
-            'status' => 'processing',
-        ]);
-
-        Order::create([
-            'user_id' => $user->id,
-            'coin_id' => 7,
-            'title' => 'Заказ на 5 рублей 1900 года',
-            'description' => 'Готов оплатить сразу.',
-            'status' => 'completed',
+            'quantity' => 1,
+            'price' => 3200.00,
         ]);
     }
 }

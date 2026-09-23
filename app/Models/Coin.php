@@ -26,9 +26,9 @@ class Coin extends Model
         'year' => 'integer',
     ];
 
-    public function orders()
+    public function orderItems()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(OrderItem::class);
     }
 
     public function isAvailable(): bool
