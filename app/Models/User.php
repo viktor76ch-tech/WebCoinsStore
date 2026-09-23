@@ -39,4 +39,14 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    public function getOrCreateCart(): Cart
+    {
+        return $this->cart()->firstOrCreate(['user_id' => $this->id]);
+    }
 }

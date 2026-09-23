@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CoinController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     $coins = \App\Models\Coin::query()
@@ -35,5 +36,12 @@ Route::middleware(['auth', 'admin'])
 
 Route::get('/coins', [CoinController::class, 'index'])->name('coins.index');
 Route::get('/coins/{coin}', [CoinController::class, 'show'])->name('coins.show');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{coin}', [CartController::class, 'add'])->name('cart.add');
+    Route::delete('/cart/item/{item}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+});
 
 require __DIR__.'/auth.php';

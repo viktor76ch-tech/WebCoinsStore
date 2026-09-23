@@ -64,14 +64,20 @@
                         </div>
 
                         @if($coin->status === 'available')
-                            <form method="POST" action="#" class="mt-4">
-                                @csrf
-                                <button type="button" disabled
-                                        class="px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 opacity-60 cursor-not-allowed"
-                                        title="Заработает на следующем шаге">
-                                    В корзину (скоро)
-                                </button>
-                            </form>
+                            @auth
+                                <form method="POST" action="{{ route('cart.add', $coin) }}" class="mt-4">
+                                    @csrf
+                                    <button type="submit"
+                                            class="px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
+                                        В корзину
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}"
+                                   class="inline-block mt-4 px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
+                                    Войти, чтобы купить
+                                </a>
+                            @endauth
                         @else
                             <p class="mt-4 text-sm text-gray-500">
                                 Монета недоступна для заказа.
