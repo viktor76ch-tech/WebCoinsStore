@@ -8,6 +8,12 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 
+// Админские контроллеры
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\CoinController as AdminCoinController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+
 Route::get('/', function () {
     $coins = \App\Models\Coin::query()
         ->where('status', 'available')
@@ -28,18 +34,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'admin'])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/', function () {
-            return 'Админ-панель: доступ разрешён';
-        })->name('dashboard');
-    });
-
+// ===== Публичный каталог =====
 Route::get('/coins', [CoinController::class, 'index'])->name('coins.index');
 Route::get('/coins/{coin}', [CoinController::class, 'show'])->name('coins.show');
 
+// ===== Корзина =====
 Route::middleware('auth')->group(function () {
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{coin}', [CartController::class, 'add'])->name('cart.add');
@@ -47,6 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 });
 
+// ===== Checkout, Payment, Orders пользователя =====
 Route::middleware('auth')->group(function () {
     // Checkout
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
@@ -61,5 +61,32 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
+
+// ===== Админка =====
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+        // Пользователи
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+
+        // Монеты
+        Route::get('/coins', [AdminCoinController::class, 'index'])->name('coins.index');
+        Route::get('/coins/create', [AdminCoinController::class, 'create'])->name('coins.create');
+        Route::post('/coins', [AdminCoinController::class, 'store'])->name('coins.store');
+        Route::get('/coins/{coin}/edit', [AdminCoinController::class, 'edit'])->name('coins.edit');
+        Route::put('/coins/{coin}', [AdminCoinController::class, 'update'])->name('coins.update');
+        Route::delete('/coins/{coin}', [AdminCoinController::class, 'destroy'])->name('coins.destroy');
+        Route::post('/coins/{id}/restore', [AdminCoinController::class, 'restore'])->name('coins.restore');
+
+        // Заказы
+        Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+        Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
+        Route::delete('/orders/{order}', [AdminOrderController::class, 'destroy'])->name('orders.destroy');
+    });
 
 require __DIR__.'/auth.php';
