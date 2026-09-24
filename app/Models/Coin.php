@@ -14,6 +14,7 @@ class Coin extends Model
         'title',
         'description',
         'price',
+        'quantity',
         'year',
         'country',
         'condition',
@@ -31,8 +32,27 @@ class Coin extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+
     public function isAvailable(): bool
     {
-        return $this->status === 'available';
+        return $this->status === 'available' && $this->quantity > 0;
+    }
+
+    public function decrementStock(int $amount = 1): void
+    {
+        $this->quantity = max(0, $this->quantity - $amount);
+        if ($this->quantity === 0) {
+            $this->status = 'sold';
+        }
+        $this->save();
+    }
+
+    public function incrementStock(int $amount = 1): void
+    {
+        $this->quantity += $amount;
+        if ($this->status === 'sold') {
+            $this->status = 'available';
+        }
+        $this->save();
     }
 }

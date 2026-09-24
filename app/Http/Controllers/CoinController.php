@@ -9,9 +9,7 @@ class CoinController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Coin::query()
-            ->where('status', '!=', 'sold')
-            ->orderByDesc('created_at');
+        $query = Coin::query()->orderByDesc('created_at');
 
         if ($request->filled('country')) {
             $query->where('country', $request->input('country'));

@@ -46,13 +46,19 @@
                         </div>
                         <div class="flex">
                             <dt class="w-32 text-gray-500">Статус</dt>
-                            <dd class="text-gray-900">
-                                @if($coin->status === 'available')
-                                    <span class="text-green-700">В наличии</span>
-                                @elseif($coin->status === 'reserved')
-                                    <span class="text-yellow-700">Забронирована</span>
+                            <dd>
+                                @if($coin->status === 'reserved')
+                                    <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#fef3c7; color:#92400e;">
+            Забронирована
+        </span>
+                                @elseif($coin->isAvailable())
+                                    <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#d1fae5; color:#065f46;">
+            В наличии: {{ $coin->quantity }}
+        </span>
                                 @else
-                                    <span class="text-red-700">Продана</span>
+                                    <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#fee2e2; color:#991b1b;">
+            Нет в наличии
+        </span>
                                 @endif
                             </dd>
                         </div>
@@ -63,13 +69,15 @@
                             {{ number_format($coin->price, 0, '.', ' ') }} ₽
                         </div>
 
-                        @if($coin->status === 'available')
+                        @if($coin->isAvailable())
                             @auth
                                 <form method="POST" action="{{ route('cart.add', $coin) }}" class="mt-4">
                                     @csrf
-                                    <button type="submit"
-                                            class="px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
+                                    <button type="submit" class="...">
                                         В корзину
+                                        @if($coin->quantity > 1)
+                                            <span class="text-xs opacity-75">(осталось {{ $coin->quantity }})</span>
+                                        @endif
                                     </button>
                                 </form>
                             @else

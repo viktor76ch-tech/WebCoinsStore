@@ -24,7 +24,7 @@ class CartController extends Controller
 
     public function add(Request $request, Coin $coin)
     {
-        if ($coin->status !== 'available') {
+        if (!$coin->isAvailable()) {
             return back()->with('error', 'Эта монета недоступна для заказа.');
         }
 

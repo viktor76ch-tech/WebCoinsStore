@@ -73,6 +73,19 @@
                 </div>
 
                 <div class="p-4 flex flex-col flex-1">
+                    @if($coin->status === 'reserved')
+                        <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#fef3c7; color:#92400e; margin-bottom:4px;">
+        Забронирована
+    </span>
+                    @elseif($coin->quantity > 0 && $coin->status === 'available')
+                        <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#d1fae5; color:#065f46; margin-bottom:4px;">
+        В наличии: {{ $coin->quantity }}
+    </span>
+                    @else
+                        <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#fee2e2; color:#991b1b; margin-bottom:4px;">
+        Нет в наличии
+    </span>
+                    @endif
                     <h3 class="font-semibold text-gray-900 leading-tight">
                         {{ $coin->title }}
                     </h3>

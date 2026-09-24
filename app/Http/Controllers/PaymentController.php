@@ -32,10 +32,6 @@ class PaymentController extends Controller
 
         $this->gateway->confirm($order);
 
-        foreach ($order->items as $item) {
-            $item->coin->update(['status' => 'sold']);
-        }
-
         return redirect()->route('orders.show', $order)
             ->with('success', 'Оплата прошла успешно. Спасибо!');
     }
@@ -44,10 +40,15 @@ class PaymentController extends Controller
     {
         $this->authorizeOrder($order);
 
+        if ($order->payment_status === 'paid') {
+            return redirect()->route('orders.show', $order)
+                ->with('error', 'Оплаченный заказ нельзя отменить.');
+        }
+
         $this->gateway->cancel($order);
 
         foreach ($order->items as $item) {
-            $item->coin->update(['status' => 'available']);
+            $item->coin->incrementStock($item->quantity);
         }
 
         return redirect()->route('orders.show', $order)

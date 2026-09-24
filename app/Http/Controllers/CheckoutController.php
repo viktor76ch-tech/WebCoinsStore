@@ -57,8 +57,8 @@ class CheckoutController extends Controller
                     'price' => $item->price_at_add,
                 ]);
 
-                // Резервируем монету
-                $item->coin->update(['status' => 'reserved']);
+                // Списываем остаток
+                $item->coin->decrementStock($item->quantity);
             }
 
             // Очищаем корзину
