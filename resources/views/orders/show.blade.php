@@ -1,71 +1,59 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Заказ {{ $order->number }}
-        </h2>
-    </x-slot>
+@extends('layouts.shop')
 
-    <div class="py-8">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8 space-y-6">
+@section('title', 'Заказ ' . $order->number)
 
-            <div class="bg-white rounded shadow p-6">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm text-gray-500">Статус</p>
-                        <p class="text-lg font-semibold">{{ $order->statusLabel() }}</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-500">Сумма</p>
-                        <p class="text-lg font-semibold">
-                            {{ number_format($order->total_price, 0, '.', ' ') }} ₽
-                        </p>
-                    </div>
-                </div>
+@section('content')
+    <h1 class="mb-4">Заказ {{ $order->number }}</h1>
 
-                @if($order->status === 'pending_payment')
-                    <div class="mt-4 p-3 bg-yellow-50 text-yellow-800 rounded text-sm">
-                        Заказ ожидает оплаты.
-                        <a href="{{ route('payment.show', $order) }}"
-                           class="underline font-medium">
-                            Перейти к оплате
-                        </a>
-                    </div>
-                @endif
-            </div>
-
-            <div class="bg-white rounded shadow p-6">
-                <h3 class="font-semibold mb-3">Состав заказа</h3>
-                <ul class="divide-y">
-                    @foreach($order->items as $item)
-                        <li class="py-3 flex justify-between">
-                            <div>
-                                <a href="{{ route('coins.show', $item->coin) }}"
-                                   class="font-medium text-gray-900 hover:text-gray-700">
-                                    {{ $item->coin->title }}
-                                </a>
-                                <p class="text-sm text-gray-500">
-                                    {{ $item->coin->country }}, {{ $item->coin->year }}
-                                </p>
-                            </div>
-                            <div class="text-right">
-                                <div>{{ number_format($item->price, 0, '.', ' ') }} ₽</div>
-                                <div class="text-sm text-gray-500">× {{ $item->quantity }}</div>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <div class="bg-white rounded shadow p-6">
-                <h3 class="font-semibold mb-3">Доставка</h3>
-                <p class="text-gray-700">{{ $order->customer_name }}</p>
-                <p class="text-gray-700">{{ $order->phone }}</p>
-                <p class="text-gray-700">{{ $order->delivery_address }}</p>
-                @if($order->comment)
-                    <p class="text-gray-500 mt-2">{{ $order->comment }}</p>
-                @endif
-            </div>
-
+    <div class="card card-body mb-3 d-flex flex-row justify-content-between">
+        <div>
+            <div class="text-muted small">Статус</div>
+            <div class="h5 mb-0">{{ $order->statusLabel() }}</div>
+        </div>
+        <div class="text-end">
+            <div class="text-muted small">Сумма</div>
+            <div class="h5 mb-0">{{ number_format($order->total_price, 0, '.', ' ') }} ₽</div>
         </div>
     </div>
-</x-app-layout>
+
+    @if($order->status === 'pending_payment')
+        <div class="alert alert-warning">
+            Заказ ожидает оплаты.
+            <a href="{{ route('payment.show', $order) }}" class="alert-link">Перейти к оплате</a>
+        </div>
+    @endif
+
+    <div class="card mb-3">
+        <div class="card-header">Состав заказа</div>
+        <ul class="list-group list-group-flush">
+            @foreach($order->items as $item)
+                <li class="list-group-item d-flex justify-content-between">
+                    <div>
+                        <a href="{{ route('coins.show', $item->coin) }}" class="text-decoration-none">
+                            {{ $item->coin->title }}
+                        </a>
+                        <div class="small text-muted">
+                            {{ $item->coin->country }}, {{ $item->coin->year }}
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div>{{ number_format($item->price, 0, '.', ' ') }} ₽</div>
+                        <div class="small text-muted">× {{ $item->quantity }}</div>
+                    </div>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Доставка</div>
+        <div class="card-body">
+            <p class="mb-1">{{ $order->customer_name }}</p>
+            <p class="mb-1">{{ $order->phone }}</p>
+            <p class="mb-1">{{ $order->delivery_address }}</p>
+            @if($order->comment)
+                <p class="text-muted mb-0">{{ $order->comment }}</p>
+            @endif
+        </div>
+    </div>
+@endsection

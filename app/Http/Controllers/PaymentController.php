@@ -11,19 +11,18 @@ class PaymentController extends Controller
     public function __construct(
         protected PaymentGatewayInterface $gateway
     ) {
-        //
     }
 
     public function show(Order $order)
     {
-        $this->authorizeOrder($order);
+        $this->authorize('view', $order);
 
         return view('payment.show', compact('order'));
     }
 
     public function pay(Order $order)
     {
-        $this->authorizeOrder($order);
+        $this->authorize('pay', $order);
 
         if ($order->payment_status === 'paid') {
             return redirect()->route('orders.show', $order)
@@ -38,12 +37,7 @@ class PaymentController extends Controller
 
     public function cancel(Order $order)
     {
-        $this->authorizeOrder($order);
-
-        if ($order->payment_status === 'paid') {
-            return redirect()->route('orders.show', $order)
-                ->with('error', 'Оплаченный заказ нельзя отменить.');
-        }
+        $this->authorize('cancel', $order);
 
         $this->gateway->cancel($order);
 
@@ -53,12 +47,5 @@ class PaymentController extends Controller
 
         return redirect()->route('orders.show', $order)
             ->with('success', 'Заказ отменён.');
-    }
-
-    protected function authorizeOrder(Order $order): void
-    {
-        if ($order->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
-            abort(403);
-        }
     }
 }

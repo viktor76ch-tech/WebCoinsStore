@@ -1,120 +1,99 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-Каталог монет
-</h2>
-    </x-slot>
+@extends('layouts.shop')
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+@section('title', 'Каталог монет')
 
-{{-- Фильтры --}}
-<form method="GET" action="{{ route('coins.index') }}"
-      class="bg-white p-4 rounded shadow grid grid-cols-1 md:grid-cols-5 gap-3">
+@section('content')
+    <h1 class="mb-4">Каталог монет</h1>
 
-    <input type="text" name="search" placeholder="Поиск по названию"
-           value="{{ request('search') }}"
-           class="border-gray-300 rounded px-3 py-2 border w-full">
+    <form method="GET" action="{{ route('coins.index') }}" class="card card-body mb-4">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <input type="text" name="search" placeholder="Поиск"
+                       value="{{ request('search') }}" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <select name="country" class="form-select">
+                    <option value="">Все страны</option>
+                    @foreach($countries as $country)
+                        <option value="{{ $country }}" @selected(request('country') === $country)>
+                            {{ $country }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="condition" class="form-select">
+                    <option value="">Состояние</option>
+                    @foreach($conditions as $condition)
+                        <option value="{{ $condition }}" @selected(request('condition') === $condition)>
+                            {{ $condition }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="year_from" placeholder="Год от"
+                       value="{{ request('year_from') }}" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="year_to" placeholder="Год до"
+                       value="{{ request('year_to') }}" class="form-control">
+            </div>
+            <div class="col-md-1 d-grid">
+                <button class="btn btn-dark">→</button>
+            </div>
+        </div>
+        @if(request()->anyFilled(['search', 'country', 'condition', 'year_from', 'year_to']))
+            <div class="mt-2">
+                <a href="{{ route('coins.index') }}" class="small">Сбросить фильтры</a>
+            </div>
+        @endif
+    </form>
 
-    <select name="country" class="border-gray-300 rounded px-3 py-2 border w-full">
-        <option value="">Все страны</option>
-        @foreach($countries as $country)
-            <option value="{{ $country }}" @selected(request('country') === $country)>
-                {{ $country }}
-            </option>
-        @endforeach
-    </select>
+    @if($coins->isEmpty())
+        <div class="alert alert-secondary">Монеты не найдены.</div>
+    @else
+        <div class="row g-3">
+            @foreach($coins as $coin)
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="ratio ratio-4x3 bg-light">
+                            @if($coin->image_url)
+                                <img src="{{ $coin->image_url }}" alt="{{ $coin->title }}"
+                                     class="object-fit-cover">
+                            @else
+                                <div class="d-flex align-items-center justify-content-center text-muted">
+                                    Нет фото
+                                </div>
+                            @endif
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            @if($coin->status === 'reserved')
+                                <span class="badge bg-warning text-dark align-self-start mb-1">Забронирована</span>
+                            @elseif($coin->isAvailable())
+                                <span class="badge bg-success align-self-start mb-1">
+                                    В наличии: {{ $coin->quantity }}
+                                </span>
+                            @else
+                                <span class="badge bg-danger align-self-start mb-1">Нет в наличии</span>
+                            @endif
 
-    <select name="condition" class="border-gray-300 rounded px-3 py-2 border w-full">
-        <option value="">Все состояния</option>
-        @foreach($conditions as $condition)
-            <option value="{{ $condition }}" @selected(request('condition') === $condition)>
-                {{ $condition }}
-            </option>
-        @endforeach
-    </select>
-
-    <input type="number" name="year_from" placeholder="Год от"
-           value="{{ request('year_from') }}"
-           class="border-gray-300 rounded px-3 py-2 border w-full">
-
-    <input type="number" name="year_to" placeholder="Год до"
-           value="{{ request('year_to') }}"
-           class="border-gray-300 rounded px-3 py-2 border w-full">
-
-    <div class="md:col-span-5 flex gap-2">
-        <button type="submit"
-                class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
-            Применить
-        </button>
-        <a href="{{ route('coins.index') }}"
-           class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-            Сбросить
-        </a>
-    </div>
-</form>
-
-{{-- Сетка монет --}}
-@if($coins->isEmpty())
-    <div class="bg-white p-6 rounded shadow text-gray-600">
-        Монеты не найдены.
-    </div>
-@else
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        @foreach($coins as $coin)
-            <div class="bg-white rounded shadow overflow-hidden flex flex-col">
-                <div class="h-40 bg-gray-100 flex items-center justify-center">
-                    @if($coin->image_url)
-                        <img src="{{ $coin->image_url }}" alt="{{ $coin->title }}"
-                             class="h-40 w-full object-cover">
-                    @else
-                        <span class="text-gray-400 text-sm">Нет фото</span>
-                    @endif
-                </div>
-
-                <div class="p-4 flex flex-col flex-1">
-                    @if($coin->status === 'reserved')
-                        <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#fef3c7; color:#92400e; margin-bottom:4px;">
-        Забронирована
-    </span>
-                    @elseif($coin->quantity > 0 && $coin->status === 'available')
-                        <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#d1fae5; color:#065f46; margin-bottom:4px;">
-        В наличии: {{ $coin->quantity }}
-    </span>
-                    @else
-                        <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#fee2e2; color:#991b1b; margin-bottom:4px;">
-        Нет в наличии
-    </span>
-                    @endif
-                    <h3 class="font-semibold text-gray-900 leading-tight">
-                        {{ $coin->title }}
-                    </h3>
-                    <p class="text-sm text-gray-500 mt-1">
-                        {{ $coin->country }}, {{ $coin->year }}
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        Состояние: {{ $coin->condition }}
-                    </p>
-
-                    <div class="mt-auto pt-3 flex justify-between items-center">
-                                    <span class="font-bold text-gray-900">
-                                        {{ number_format($coin->price, 0, '.', ' ') }} ₽
-                                    </span>
-                        <a href="{{ route('coins.show', $coin) }}"
-                           class="text-sm px-3 py-1 bg-gray-800 text-white rounded hover:bg-gray-700">
-                            Подробнее
-                        </a>
+                            <h5 class="card-title h6 mt-1">{{ $coin->title }}</h5>
+                            <p class="card-text small text-muted mb-2">
+                                {{ $coin->country }}, {{ $coin->year }} · {{ $coin->condition }}
+                            </p>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="fw-bold">{{ number_format($coin->price, 0, '.', ' ') }} ₽</span>
+                                <a href="{{ route('coins.show', $coin) }}" class="btn btn-sm btn-dark">
+                                    Подробнее
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
 
-    <div class="pt-4">
-        {{ $coins->links() }}
-    </div>
+        <div class="mt-4">{{ $coins->links() }}</div>
     @endif
-
-    </div>
-    </div>
-    </x-app-layout>
+@endsection

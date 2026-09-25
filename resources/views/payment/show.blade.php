@@ -1,43 +1,30 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Оплата заказа {{ $order->number }}
-        </h2>
-    </x-slot>
+@extends('layouts.shop')
 
-    <div class="py-8">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white rounded shadow p-8 text-center">
+@section('title', 'Оплата заказа ' . $order->number)
 
-                <p class="text-gray-600">К оплате:</p>
-                <p class="text-4xl font-bold text-gray-900 my-4">
-                    {{ number_format($order->total_price, 0, '.', ' ') }} ₽
-                </p>
+@section('content')
+    <div class="card card-body text-center mx-auto" style="max-width: 500px;">
+        <h4>Оплата заказа {{ $order->number }}</h4>
 
-                <p class="text-sm text-gray-500 mb-6">
-                    Это демонстрационная оплата. Реальный платёжный шлюз не подключён.
-                </p>
+        <p class="text-muted mb-0 mt-3">К оплате:</p>
+        <div class="display-5 fw-bold my-2">
+            {{ number_format($order->total_price, 0, '.', ' ') }} ₽
+        </div>
 
-                <div class="flex justify-center gap-3">
-                    <form method="POST" action="{{ route('payment.pay', $order) }}">
-                        @csrf
-                        <button type="submit"
-                                class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-500">
-                            Оплатить
-                        </button>
-                    </form>
+        <p class="small text-muted">
+            Это демонстрационная оплата. Реальный платёжный шлюз не подключён.
+        </p>
 
-                    <form method="POST" action="{{ route('payment.cancel', $order) }}"
-                          onsubmit="return confirm('Отменить заказ?')">
-                        @csrf
-                        <button type="submit"
-                                class="px-6 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
-                            Отменить
-                        </button>
-                    </form>
-                </div>
-
-            </div>
+        <div class="d-flex justify-content-center gap-2 mt-3">
+            <form method="POST" action="{{ route('payment.pay', $order) }}">
+                @csrf
+                <button class="btn btn-success btn-lg">Оплатить</button>
+            </form>
+            <form method="POST" action="{{ route('payment.cancel', $order) }}"
+                  onsubmit="return confirm('Отменить заказ?')">
+                @csrf
+                <button class="btn btn-outline-secondary btn-lg">Отменить</button>
+            </form>
         </div>
     </div>
-</x-app-layout>
+@endsection

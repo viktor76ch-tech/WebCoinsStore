@@ -48,7 +48,7 @@ class CartController extends Controller
 
     public function remove(CartItem $item)
     {
-        $this->authorizeItem($item);
+        $this->authorize('delete', $item);
         $item->delete();
 
         return back()->with('success', 'Позиция удалена из корзины.');
@@ -60,12 +60,5 @@ class CartController extends Controller
         $cart->items()->delete();
 
         return back()->with('success', 'Корзина очищена.');
-    }
-
-    protected function authorizeItem(CartItem $item): void
-    {
-        if ($item->cart->user_id !== Auth::id()) {
-            abort(403);
-        }
     }
 }

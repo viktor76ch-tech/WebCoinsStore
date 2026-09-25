@@ -1,35 +1,30 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Личный кабинет') }}
-        </h2>
-    </x-slot>
+@extends('layouts.shop')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 space-y-4">
-                    <p>Здравствуйте, <b>{{ auth()->user()->name }}</b>!</p>
-                    <p>Ваш email: <b>{{ auth()->user()->email }}</b></p>
-                    <p>Роль:
-                        <b>{{ auth()->user()->role === 'admin' ? 'Администратор' : 'Пользователь' }}</b>
-                    </p>
+@section('title', 'Личный кабинет')
 
-                    <div class="flex gap-4 pt-4">
-                        <a href="{{ url('/profile') }}"
-                           class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
-                            Редактировать профиль
-                        </a>
+@section('content')
+    <h1 class="mb-4">Личный кабинет</h1>
 
-                        @if(auth()->user()->isAdmin())
-                            <a href="{{ route('admin.dashboard') }}"
-                               class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500">
-                                Админ-панель
-                            </a>
-                        @endif
-                    </div>
-                </div>
-            </div>
+    <div class="card card-body">
+        <p>Здравствуйте, <strong>{{ auth()->user()->name }}</strong>!</p>
+        <p class="text-muted mb-2">Email: {{ auth()->user()->email }}</p>
+        <p class="mb-3">
+            Роль:
+            <strong>{{ auth()->user()->role === 'admin' ? 'Администратор' : 'Пользователь' }}</strong>
+        </p>
+
+        <div class="d-flex gap-2">
+            <a href="{{ route('profile.edit') }}" class="btn btn-outline-secondary">
+                Редактировать профиль
+            </a>
+            <a href="{{ route('orders.index') }}" class="btn btn-dark">
+                Мои заказы
+            </a>
+            @if(auth()->user()->isAdmin())
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-danger">
+                    Админ-панель
+                </a>
+            @endif
         </div>
     </div>
-</x-app-layout>
+@endsection

@@ -1,57 +1,42 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Мои заказы
-        </h2>
-    </x-slot>
+@extends('layouts.shop')
 
-    <div class="py-8">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+@section('title', 'Мои заказы')
 
-            @if($orders->isEmpty())
-                <div class="bg-white p-6 rounded shadow text-gray-600">
-                    У вас пока нет заказов.
-                </div>
-            @else
-                <div class="bg-white rounded shadow overflow-hidden">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Номер</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Дата</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Позиций</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Сумма</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Статус</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                        @foreach($orders as $order)
-                            <tr>
-                                <td class="px-4 py-3 font-medium text-gray-900">{{ $order->number }}</td>
-                                <td class="px-4 py-3 text-gray-700">{{ $order->created_at->format('d.m.Y H:i') }}</td>
-                                <td class="px-4 py-3 text-gray-700">{{ $order->items_count }}</td>
-                                <td class="px-4 py-3 text-gray-900">{{ number_format($order->total_price, 0, '.', ' ') }} ₽</td>
-                                <td class="px-4 py-3">
-                                        <span class="px-2 py-1 rounded text-xs bg-gray-100 text-gray-700">
-                                            {{ $order->statusLabel() }}
-                                        </span>
-                                </td>
-                                <td class="px-4 py-3 text-right">
-                                    <a href="{{ route('orders.show', $order) }}"
-                                       class="text-gray-700 hover:text-gray-900 text-sm">
-                                        Открыть
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
+@section('content')
+    <h1 class="mb-4">Мои заказы</h1>
 
-                <div class="pt-4">{{ $orders->links() }}</div>
-            @endif
-
+    @if($orders->isEmpty())
+        <div class="alert alert-secondary">У вас пока нет заказов.</div>
+    @else
+        <div class="card">
+            <table class="table mb-0 align-middle">
+                <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Дата</th>
+                    <th>Позиций</th>
+                    <th>Сумма</th>
+                    <th>Статус</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($orders as $order)
+                    <tr>
+                        <td class="fw-semibold">{{ $order->number }}</td>
+                        <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
+                        <td>{{ $order->items_count }}</td>
+                        <td>{{ number_format($order->total_price, 0, '.', ' ') }} ₽</td>
+                        <td><span class="badge bg-secondary">{{ $order->statusLabel() }}</span></td>
+                        <td class="text-end">
+                            <a href="{{ route('orders.show', $order) }}"
+                               class="btn btn-sm btn-outline-secondary">Открыть</a>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
         </div>
-    </div>
-</x-app-layout>
+        <div class="mt-3">{{ $orders->links() }}</div>
+    @endif
+@endsection

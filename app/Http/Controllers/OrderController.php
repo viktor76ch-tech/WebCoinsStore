@@ -20,9 +20,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        if ($order->user_id !== Auth::id() && !Auth::user()->isAdmin()) {
-            abort(403);
-        }
+        $this->authorize('view', $order);
 
         $order->load('items.coin');
 

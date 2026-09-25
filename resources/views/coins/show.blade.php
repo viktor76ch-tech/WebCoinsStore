@@ -1,100 +1,75 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $coin->title }}
-        </h2>
-    </x-slot>
+@extends('layouts.shop')
 
-    <div class="py-8">
-        <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+@section('title', $coin->title)
 
-            <a href="{{ route('coins.index') }}"
-               class="text-sm text-gray-600 hover:text-gray-900">
-                ← Назад к каталогу
-            </a>
+@section('content')
+    <a href="{{ route('coins.index') }}" class="text-decoration-none text-muted small">
+        ← Назад к каталогу
+    </a>
 
-            <div class="bg-white rounded shadow mt-4 grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-
-                {{-- Изображение --}}
-                <div class="bg-gray-100 rounded flex items-center justify-center h-80">
+    <div class="card mt-3">
+        <div class="row g-0">
+            <div class="col-md-5">
+                <div class="ratio ratio-1x1 bg-light">
                     @if($coin->image_url)
                         <img src="{{ $coin->image_url }}" alt="{{ $coin->title }}"
-                             class="max-h-80 object-contain">
+                             class="object-fit-contain">
                     @else
-                        <span class="text-gray-400">Нет фото</span>
+                        <div class="d-flex align-items-center justify-content-center text-muted">
+                            Нет фото
+                        </div>
                     @endif
                 </div>
+            </div>
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h1 class="h3">{{ $coin->title }}</h1>
+                    <p class="text-muted">{{ $coin->description }}</p>
 
-                {{-- Информация --}}
-                <div class="flex flex-col">
-                    <h1 class="text-2xl font-bold text-gray-900">{{ $coin->title }}</h1>
+                    <dl class="row small">
+                        <dt class="col-4 text-muted">Страна</dt>
+                        <dd class="col-8">{{ $coin->country }}</dd>
 
-                    <p class="text-gray-600 mt-2">{{ $coin->description }}</p>
+                        <dt class="col-4 text-muted">Год</dt>
+                        <dd class="col-8">{{ $coin->year }}</dd>
 
-                    <dl class="mt-4 space-y-2 text-sm">
-                        <div class="flex">
-                            <dt class="w-32 text-gray-500">Страна</dt>
-                            <dd class="text-gray-900">{{ $coin->country }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="w-32 text-gray-500">Год</dt>
-                            <dd class="text-gray-900">{{ $coin->year }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="w-32 text-gray-500">Состояние</dt>
-                            <dd class="text-gray-900">{{ $coin->condition }}</dd>
-                        </div>
-                        <div class="flex">
-                            <dt class="w-32 text-gray-500">Статус</dt>
-                            <dd>
-                                @if($coin->status === 'reserved')
-                                    <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#fef3c7; color:#92400e;">
-            Забронирована
-        </span>
-                                @elseif($coin->isAvailable())
-                                    <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#d1fae5; color:#065f46;">
-            В наличии: {{ $coin->quantity }}
-        </span>
-                                @else
-                                    <span style="display:inline-block; font-size:12px; padding:2px 8px; border-radius:10px; background:#fee2e2; color:#991b1b;">
-            Нет в наличии
-        </span>
-                                @endif
-                            </dd>
-                        </div>
+                        <dt class="col-4 text-muted">Состояние</dt>
+                        <dd class="col-8">{{ $coin->condition }}</dd>
+
+                        <dt class="col-4 text-muted">Наличие</dt>
+                        <dd class="col-8">
+                            @if($coin->status === 'reserved')
+                                <span class="badge bg-warning text-dark">Забронирована</span>
+                            @elseif($coin->isAvailable())
+                                <span class="badge bg-success">В наличии: {{ $coin->quantity }}</span>
+                            @else
+                                <span class="badge bg-danger">Нет в наличии</span>
+                            @endif
+                        </dd>
                     </dl>
 
-                    <div class="mt-auto pt-6">
-                        <div class="text-3xl font-bold text-gray-900">
-                            {{ number_format($coin->price, 0, '.', ' ') }} ₽
-                        </div>
+                    <div class="d-flex align-items-center justify-content-between mt-4">
+                        <div class="h3 mb-0">{{ number_format($coin->price, 0, '.', ' ') }} ₽</div>
 
                         @if($coin->isAvailable())
                             @auth
-                                <form method="POST" action="{{ route('cart.add', $coin) }}" class="mt-4">
+                                <form method="POST" action="{{ route('cart.add', $coin) }}">
                                     @csrf
-                                    <button type="submit" class="...">
-                                        В корзину
-                                        @if($coin->quantity > 1)
-                                            <span class="text-xs opacity-75">(осталось {{ $coin->quantity }})</span>
-                                        @endif
+                                    <button class="btn btn-dark btn-lg">
+                                        <i class="bi bi-cart-plus"></i> В корзину
                                     </button>
                                 </form>
                             @else
-                                <a href="{{ route('login') }}"
-                                   class="inline-block mt-4 px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
+                                <a href="{{ route('login') }}" class="btn btn-dark btn-lg">
                                     Войти, чтобы купить
                                 </a>
                             @endauth
                         @else
-                            <p class="mt-4 text-sm text-gray-500">
-                                Монета недоступна для заказа.
-                            </p>
+                            <span class="text-muted">Недоступна для заказа</span>
                         @endif
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection
