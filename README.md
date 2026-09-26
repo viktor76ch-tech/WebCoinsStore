@@ -44,7 +44,7 @@
 ### 1. Клонировать репозиторий
 
 ```bash
-git clone https://github.com/ТВОЙ_ЛОГИН/numismatics.git
+git clone https://github.com/viktor76ch-tech/WebCoinsStore
 cd numismatics
 ```
 
