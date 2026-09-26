@@ -4,11 +4,11 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreCoinRequest extends FormRequest
+class UpdateCoinRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return $this->user()?->isAdmin() ?? false;
+        return $this->user() !== null && $this->user()->isAdmin();
     }
 
     public function rules(): array

@@ -1,5 +1,4 @@
-{{-- resources/views/layouts/shop-nav.blade.php --}}
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-shop">
     <div class="container">
         <a class="navbar-brand fw-bold" href="{{ route('coins.index') }}">
             <i class="bi bi-coin"></i> Нумизматика
@@ -30,19 +29,24 @@
                 @endauth
             </ul>
 
-            <ul class="navbar-nav">
+            <ul class="navbar-nav align-items-center">
                 @auth
                     @php
                         $cartCount = Auth::user()->getOrCreateCart()->items()->sum('quantity');
                     @endphp
-                    <li class="nav-item">
-                        <a class="nav-link position-relative" href="{{ route('cart.index') }}">
-                            <i class="bi bi-cart3 fs-5"></i>
-                            @if($cartCount > 0)
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ $cartCount }}
-                                </span>
-                            @endif
+                    <li class="nav-item me-3">
+                        <a class="nav-link" href="{{ route('cart.index') }}">
+                            <span style="position:relative; display:inline-block; line-height:1;">
+                                <i class="bi bi-cart3 fs-5"></i>
+                                @if($cartCount > 0)
+                                    <span style="position:absolute; top:-8px; right:-12px;
+                                                 background:#dc3545; color:#fff;
+                                                 border-radius:10px; padding:1px 6px;
+                                                 font-size:0.7rem; line-height:1.2;">
+                                        {{ $cartCount }}
+                                    </span>
+                                @endif
+                            </span>
                         </a>
                     </li>
                     <li class="nav-item dropdown">
@@ -61,10 +65,11 @@
                         </ul>
                     </li>
                 @else
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Вход</a></li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-light btn-sm mt-1 ms-2"
-                           href="{{ route('register') }}">Регистрация</a>
+                        <a class="nav-link" href="{{ route('login') }}">Вход</a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="btn btn-shop-accent btn-sm" href="{{ route('register') }}">Регистрация</a>
                     </li>
                 @endauth
             </ul>

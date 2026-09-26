@@ -40,7 +40,7 @@
 
                 <div class="d-flex justify-content-between">
                     <a href="{{ route('cart.index') }}" class="btn btn-outline-secondary">← В корзину</a>
-                    <button class="btn btn-dark">Перейти к оплате</button>
+                    <button class="btn btn-shop">Перейти к оплате</button>
                 </div>
             </form>
         </div>

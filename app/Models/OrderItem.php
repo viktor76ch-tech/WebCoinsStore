@@ -27,7 +27,7 @@ class OrderItem extends Model
 
     public function coin()
     {
-        return $this->belongsTo(Coin::class);
+        return $this->belongsTo(Coin::class)->withTrashed();
     }
 
     public function subtotal(): float

@@ -40,7 +40,7 @@
                        value="{{ request('year_to') }}" class="form-control">
             </div>
             <div class="col-md-1 d-grid">
-                <button class="btn btn-dark">→</button>
+                <button class="btn btn-shop">→</button>
             </div>
         </div>
         @if(request()->anyFilled(['search', 'country', 'condition', 'year_from', 'year_to']))
@@ -53,9 +53,9 @@
     @if($coins->isEmpty())
         <div class="alert alert-secondary">Монеты не найдены.</div>
     @else
-        <div class="row g-3">
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
             @foreach($coins as $coin)
-                <div class="col-sm-6 col-md-4 col-lg-3">
+                <div style="width: 260px; max-width: 100%;">
                     <div class="card h-100">
                         <div class="ratio ratio-4x3 bg-light">
                             @if($coin->image_url)
@@ -84,7 +84,7 @@
                             </p>
                             <div class="mt-auto d-flex justify-content-between align-items-center">
                                 <span class="fw-bold">{{ number_format($coin->price, 0, '.', ' ') }} ₽</span>
-                                <a href="{{ route('coins.show', $coin) }}" class="btn btn-sm btn-dark">
+                                <a href="{{ route('coins.show', $coin) }}" class="btn btn-sm btn-shop">
                                     Подробнее
                                 </a>
                             </div>

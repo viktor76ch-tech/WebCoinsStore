@@ -10,7 +10,7 @@
                 <option value="{{ $key }}" @selected(request('status') === $key)>{{ $label }}</option>
             @endforeach
         </select>
-        <button class="btn btn-sm btn-dark">Фильтр</button>
+        <button class="btn btn-sm btn-shop">Фильтр</button>
     </form>
 
     <div class="card">

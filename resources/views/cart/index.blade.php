@@ -9,7 +9,7 @@
         <div class="card card-body text-center">
             <p class="text-muted mb-3">Ваша корзина пуста.</p>
             <div>
-                <a href="{{ route('coins.index') }}" class="btn btn-dark">Перейти в каталог</a>
+                <a href="{{ route('coins.index') }}" class="btn btn-shop">Перейти в каталог</a>
             </div>
         </div>
     @else

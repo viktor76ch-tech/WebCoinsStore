@@ -1,0 +1,88 @@
+:root {
+    --shop-primary: #6d4c41;
+    --shop-primary-hover: #5d4037;
+    --shop-accent: #c69c6d;
+    --shop-accent-hover: #b08860;
+    --shop-bg: #faf6f0;
+    --shop-text: #3e2723;
+    --shop-border: #e8ddcd;
+    --shop-muted: #8d7b6b;
+}
+
+body {
+    background-color: var(--shop-bg);
+    color: var(--shop-text);
+}
+
+.navbar-shop {
+    background-color: var(--shop-primary);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.btn-shop {
+    background-color: var(--shop-primary);
+    color: #fff;
+    border-color: var(--shop-primary);
+    font-weight: 500;
+}
+.btn-shop:hover,
+.btn-shop:focus {
+    background-color: var(--shop-primary-hover);
+    color: #fff;
+    border-color: var(--shop-primary-hover);
+}
+
+.btn-shop-accent {
+    background-color: var(--shop-accent);
+    color: var(--shop-text);
+    border-color: var(--shop-accent);
+    font-weight: 600;
+}
+.btn-shop-accent:hover,
+.btn-shop-accent:focus {
+    background-color: var(--shop-accent-hover);
+    color: var(--shop-text);
+    border-color: var(--shop-accent-hover);
+}
+
+.btn-outline-shop {
+    color: var(--shop-primary);
+    border-color: var(--shop-primary);
+    background: transparent;
+}
+.btn-outline-shop:hover {
+    background-color: var(--shop-primary);
+    color: #fff;
+}
+
+.card {
+    border-color: var(--shop-border);
+}
+
+a {
+    color: var(--shop-primary);
+}
+a:hover {
+    color: var(--shop-primary-hover);
+}
+
+.shop-footer {
+    background-color: #fff;
+    border-top: 1px solid var(--shop-border);
+}
+
+.admin-sidebar {
+    background: #fff;
+    border-right: 1px solid var(--shop-border);
+}
+.admin-sidebar .nav-link {
+    color: var(--shop-text);
+    border-radius: 6px;
+}
+.admin-sidebar .nav-link:hover {
+    background-color: #f1e9dd;
+}
+.admin-sidebar .nav-link.active {
+    background-color: var(--shop-primary);
+    color: #fff;
+}

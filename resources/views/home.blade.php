@@ -4,90 +4,76 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Нумизматика — магазин монет</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/shop.css') }}">
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body class="d-flex flex-column min-vh-100">
 
-<header class="bg-white shadow">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <a href="{{ route('home') }}" class="text-xl font-bold">Нумизматика</a>
-
-        <nav class="flex items-center gap-4">
-            <a href="{{ route('coins.index') }}" class="text-gray-700 hover:text-gray-900">
-                Каталог
-            </a>
-
+<nav class="navbar navbar-expand-lg navbar-dark navbar-shop">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ route('home') }}">
+            <i class="bi bi-coin"></i> Нумизматика
+        </a>
+        <div class="d-flex align-items-center gap-3">
+            <a href="{{ route('coins.index') }}" class="nav-link text-white">Каталог</a>
             @auth
-                <a href="{{ url('/dashboard') }}" class="text-gray-700 hover:text-gray-900">
-                    Кабинет
-                </a>
+                <a href="{{ url('/dashboard') }}" class="nav-link text-white">Кабинет</a>
             @else
-                <a href="{{ route('login') }}" class="text-gray-700 hover:text-gray-900">
-                    Вход
-                </a>
+                <a href="{{ route('login') }}" class="btn btn-outline-light btn-sm">Вход</a>
                 @if(Route::has('register'))
-                    <a href="{{ route('register') }}"
-                       class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
-                        Регистрация
-                    </a>
+                    <a href="{{ route('register') }}" class="btn btn-shop-accent btn-sm">Регистрация</a>
                 @endif
             @endauth
-        </nav>
+        </div>
     </div>
-</header>
+</nav>
 
-<section class="max-w-7xl mx-auto px-4 py-16 text-center">
-    <h1 class="text-4xl md:text-5xl font-bold mb-4">
-        Магазин нумизматики
-    </h1>
-    <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+<section class="container text-center py-5">
+    <h1 class="display-5 fw-bold mb-3">Магазин нумизматики</h1>
+    <p class="lead text-muted mx-auto mb-4" style="max-width:640px;">
         Редкие монеты Российской империи, Европы и США. Проверенное состояние,
         честные описания, быстрая доставка.
     </p>
-    <a href="{{ route('coins.index') }}"
-       class="inline-block px-6 py-3 bg-gray-900 text-white rounded hover:bg-gray-700">
+    <a href="{{ route('coins.index') }}" class="btn btn-shop btn-lg">
         Перейти в каталог
     </a>
 </section>
 
 @if($coins->isNotEmpty())
-    <section class="max-w-7xl mx-auto px-4 pb-16">
-        <h2 class="text-2xl font-semibold mb-6">Новые поступления</h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    <section class="container pb-5 flex-grow-1">
+        <h2 class="h4 mb-4">Новые поступления</h2>
+        <div class="d-flex flex-wrap gap-3 justify-content-center">
             @foreach($coins as $coin)
-                <a href="{{ route('coins.show', $coin) }}"
-                   class="bg-white rounded shadow overflow-hidden hover:shadow-lg transition">
-                    <div class="h-40 bg-gray-100 flex items-center justify-center">
-                        @if($coin->image_url)
-                            <img src="{{ $coin->image_url }}" alt="{{ $coin->title }}"
-                                 class="h-40 w-full object-cover">
-                        @else
-                            <span class="text-gray-400 text-sm">Нет фото</span>
-                        @endif
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-900 leading-tight">
-                            {{ $coin->title }}
-                        </h3>
-                        <p class="text-sm text-gray-500 mt-1">
-                            {{ $coin->country }}, {{ $coin->year }}
-                        </p>
-                        <p class="mt-2 font-bold text-gray-900">
-                            {{ number_format($coin->price, 0, '.', ' ') }} ₽
-                        </p>
-                    </div>
-                </a>
+                <div style="width: 260px; max-width: 100%;">
+                    <a href="{{ route('coins.show', $coin) }}"
+                       class="card h-100 text-decoration-none text-dark">
+                        <div class="ratio ratio-4x3 bg-light">
+                            @if($coin->image_url)
+                                <img src="{{ $coin->image_url }}" alt="{{ $coin->title }}"
+                                     class="object-fit-cover">
+                            @else
+                                <div class="d-flex align-items-center justify-content-center text-muted">Нет фото</div>
+                            @endif
+                        </div>
+                        <div class="card-body">
+                            <h3 class="h6">{{ $coin->title }}</h3>
+                            <p class="small text-muted mb-2">{{ $coin->country }}, {{ $coin->year }}</p>
+                            <p class="fw-bold mb-0">{{ number_format($coin->price, 0, '.', ' ') }} ₽</p>
+                        </div>
+                    </a>
+                </div>
             @endforeach
         </div>
     </section>
 @endif
 
-<footer class="bg-white border-t">
-    <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-gray-500 text-center">
-        © {{ date('Y') }} Нумизматика. Курсовой проект.
+<footer class="shop-footer py-3 mt-auto">
+    <div class="container text-center text-muted small">
+        © {{ date('Y') }} Нумизматика
     </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

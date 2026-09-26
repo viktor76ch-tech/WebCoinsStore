@@ -1,58 +1,173 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Нумизматика — веб-магазин монет
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Курсовой проект: интернет-магазин нумизматики на Laravel.
+Каталог монет, корзина, оформление заказа, mock-оплата, личный кабинет и админ-панель.
 
-## About Laravel
+## Стек
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **PHP** 8.2+
+- **Laravel** 11/12/13
+- **MySQL** 5.7+ / MariaDB
+- **Blade** + **Bootstrap 5** (CDN, без сборки)
+- **Composer** — единственная зависимость
+- **Node.js / Vite — не используются**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Возможности
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Гость
+- Каталог монет с фильтрами (страна, состояние, год, поиск)
+- Просмотр карточки монеты
+- Регистрация и вход
 
-## Learning Laravel
+### Пользователь
+- Личный кабинет: редактирование профиля, смена пароля
+- Корзина (сохраняется в БД)
+- Оформление заказа: адрес, телефон, комментарий
+- Mock-оплата: «Оплатить» / «Отменить»
+- Список своих заказов и просмотр деталей
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Администратор
+- Дашборд: пользователи, монеты, заказы, выручка
+- CRUD монет: создание, редактирование, soft delete, восстановление
+- Управление количеством на складе
+- Все заказы: смена статусов, отмена с возвратом остатка
+- Список и просмотр пользователей
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Требования к окружению
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- PHP 8.2 или выше с расширениями: `pdo_mysql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`
+- Composer 2
+- MySQL / MariaDB
 
-## Agentic Development
+## Установка
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Клонировать репозиторий
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/ТВОЙ_ЛОГИН/numismatics.git
+cd numismatics
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Установить зависимости
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Настроить `.env`
 
-## Code of Conduct
+```bash
+cp .env.example .env
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Открыть `.env` и указать параметры своей БД:
 
-## Security Vulnerabilities
+```env
+DB_DATABASE=numismatics
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Создать базу данных
 
-## License
+```sql
+CREATE DATABASE numismatics CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Сгенерировать ключ приложения
+
+```bash
+php artisan key:generate
+```
+
+### 6. Выполнить миграции и сиды
+
+```bash
+php artisan migrate --seed
+```
+
+### 7. Запустить локальный сервер
+
+```bash
+php artisan serve
+```
+
+Открыть `http://127.0.0.1:8000`.
+
+## Тестовые аккаунты
+
+| Роль | Email | Пароль |
+|------|-------|--------|
+| Администратор | `admin@example.com` | `password` |
+| Пользователь | `user@example.com` | `password` |
+
+## Сценарий проверки
+
+1. Открыть каталог `/coins` под гостем.
+2. Зарегистрироваться или войти под `user@example.com`.
+3. Добавить 2–3 монеты в корзину.
+4. Оформить заказ (`/cart` → «Оформить заказ»).
+5. Заполнить адрес, перейти к оплате.
+6. Нажать «Оплатить» — заказ станет «Оплачен».
+7. Открыть «Мои заказы» — заказ в списке.
+8. Войти как `admin@example.com`.
+9. Открыть `/admin` — дашборд с метриками.
+10. Открыть «Монеты» — добавить новую, изменить остаток, удалить, восстановить.
+11. Открыть «Заказы» — сменить статус на «Отправлен».
+12. Открыть «Пользователи» — просмотреть профиль.
+
+## Архитектура
+
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── Admin/          ← админ-панель
+│   │   ├── Auth/           ← Breeze
+│   │   ├── CartController
+│   │   ├── CheckoutController
+│   │   ├── CoinController
+│   │   ├── OrderController
+│   │   └── PaymentController
+│   ├── Middleware/
+│   │   └── AdminMiddleware
+│   └── Requests/           ← FormRequest-валидация
+├── Models/
+│   ├── Cart, CartItem
+│   ├── Coin, Order, OrderItem
+│   └── User
+├── Policies/               ← OrderPolicy, CartItemPolicy
+└── Services/
+    └── Payments/           ← PaymentGatewayInterface + MockPaymentGateway
+
+resources/views/
+├── admin/                  ← CRUD админки
+├── auth/                   ← логин/регистрация (Breeze)
+├── cart/                   ← корзина
+├── checkout/               ← оформление
+├── coins/                  ← каталог и карточка монеты
+├── errors/                 ← 403, 404, 419, 500
+├── layouts/                ← shop, admin, guest
+├── orders/                 ← заказы пользователя
+└── payment/                ← страница оплаты
+```
+
+## Оплата
+
+Оплата **демонстрационная**. Реализована через интерфейс `PaymentGatewayInterface`
+с реализацией `MockPaymentGateway`. Чтобы подключить реальный провайдер (ЮKassa, Stripe):
+
+1. Создать класс `YooKassaGateway implements PaymentGatewayInterface`.
+2. Забиндить его в `AppServiceProvider` вместо `MockPaymentGateway`.
+3. Контроллер `PaymentController` не меняется — он работает через интерфейс.
+
+## Ограничения MVP
+
+- Без реальной оплаты
+- Без доставки и интеграции с курьерами
+- Без очередей и микросервисов
+- Без сложной аналитики
+
+## Лицензия
+
+Учебный проект.

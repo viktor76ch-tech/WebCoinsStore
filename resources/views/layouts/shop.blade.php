@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', config('app.name', 'Нумизматика'))</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/shop.css') }}">
 </head>
-<body class="d-flex flex-column min-vh-100 bg-light">
+<body class="d-flex flex-column min-vh-100">
 
 @include('layouts.shop-nav')
 
@@ -31,9 +31,9 @@
     @yield('content')
 </main>
 
-<footer class="bg-white border-top py-3 mt-auto">
+<footer class="shop-footer py-3 mt-auto">
     <div class="container text-center text-muted small">
-        © {{ date('Y') }} Нумизматика. Курсовой проект.
+        © {{ date('Y') }} Нумизматика
     </div>
 </footer>
 

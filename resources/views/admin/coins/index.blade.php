@@ -17,7 +17,7 @@
                     @checked(request('with_trashed'))>
                 <label for="with_trashed" class="form-check-label small">Показать удалённые</label>
             </div>
-            <button class="btn btn-sm btn-dark">Фильтр</button>
+            <button class="btn btn-sm btn-shop">Фильтр</button>
         </form>
 
         <a href="{{ route('admin.coins.create') }}" class="btn btn-success btn-sm">

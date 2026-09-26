@@ -8,13 +8,14 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/shop.css') }}">
 </head>
-<body class="bg-light">
+<body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark navbar-shop">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ route('admin.dashboard') }}">
-            Нумизматика — Админ
+        <a class="navbar-brand fw-bold" href="{{ route('admin.dashboard') }}">
+            <i class="bi bi-coin"></i> Нумизматика — Админ
         </a>
         <div class="d-flex align-items-center text-white gap-3">
             <a href="{{ route('coins.index') }}" class="text-white text-decoration-none">
@@ -23,7 +24,7 @@
             <span>{{ Auth::user()->name }}</span>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button class="btn btn-sm btn-outline-light">Выход</button>
+                <button class="btn btn-sm btn-shop-accent">Выход</button>
             </form>
         </div>
     </div>
@@ -31,8 +32,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <aside class="col-md-2 bg-white border-end min-vh-100 py-3">
-            <ul class="nav flex-column">
+        <aside class="col-md-2 admin-sidebar min-vh-100 py-3">
+            <ul class="nav flex-column px-2">
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
                        href="{{ route('admin.dashboard') }}">

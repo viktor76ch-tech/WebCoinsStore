@@ -32,8 +32,40 @@ class CheckoutController extends Controller
         }
 
         $order = DB::transaction(function () use ($cart, $data) {
-            // ... как было
+            $total = $cart->items->sum(fn ($i) => $i->quantity * $i->price_at_add);
+
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'number' => Order::generateNumber(),
+                'total_price' => $total,
+                'status' => 'pending_payment',
+                'payment_status' => 'unpaid',
+                'customer_name' => $data['customer_name'],
+                'phone' => $data['phone'],
+                'delivery_address' => $data['delivery_address'],
+                'comment' => $data['comment'] ?? null,
+            ]);
+
+            foreach ($cart->items as $item) {
+                $order->items()->create([
+                    'coin_id' => $item->coin_id,
+                    'quantity' => $item->quantity,
+                    'price' => $item->price_at_add,
+                ]);
+
+                if ($item->coin) {
+                    $item->coin->decrementStock($item->quantity);
+                }
+            }
+
+            $cart->items()->delete();
+
+            return $order;
         });
+
+        if (!$order) {
+            return back()->with('error', 'Не удалось создать заказ.');
+        }
 
         return redirect()->route('payment.show', $order);
     }
