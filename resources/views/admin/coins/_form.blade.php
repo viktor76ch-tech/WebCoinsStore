@@ -3,6 +3,19 @@
     $val = fn($field, $default = '') => old($field, $isEdit ? $coin->$field : $default);
 @endphp
 
+<div class="col-md-12">
+    <label class="form-label">Категория</label>
+    <select name="category_id" class="form-select">
+        <option value="">— Без категории —</option>
+        @foreach(\App\Models\Category::orderBy('sort_order')->get() as $category)
+            <option value="{{ $category->id }}" @selected((int) $val('category_id') === $category->id)>
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+    @error('category_id')<div class="text-danger small">{{ $message }}</div>@enderror
+</div>
+
 <div class="row g-3">
     <div class="col-md-8">
         <label class="form-label">Название</label>

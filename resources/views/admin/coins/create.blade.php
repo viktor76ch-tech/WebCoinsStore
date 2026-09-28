@@ -9,7 +9,7 @@
 
         <div class="d-flex justify-content-between mt-4">
             <a href="{{ route('admin.coins.index') }}" class="btn btn-outline-secondary">← Назад</a>
-            <button class="btn btn-success">Сохранить</button>
+            <button class="btn btn-shop">Сохранить</button>
         </div>
     </form>
 @endsection

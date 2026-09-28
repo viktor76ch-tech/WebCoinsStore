@@ -27,6 +27,18 @@
                     <p class="text-muted">{{ $coin->description }}</p>
 
                     <dl class="row small">
+                        <dt class="col-4 text-muted">Категория</dt>
+                        <dd class="col-8">
+                            @if($coin->category)
+                                <a href="{{ route('coins.index', ['category' => $coin->category->slug]) }}"
+                                   class="text-decoration-none">
+                                    {{ $coin->category->name }}
+                                </a>
+                            @else
+                                —
+                            @endif
+                        </dd>
+
                         <dt class="col-4 text-muted">Страна</dt>
                         <dd class="col-8">{{ $coin->country }}</dd>
 

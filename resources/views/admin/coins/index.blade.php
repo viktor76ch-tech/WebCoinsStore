@@ -20,7 +20,7 @@
             <button class="btn btn-sm btn-shop">Фильтр</button>
         </form>
 
-        <a href="{{ route('admin.coins.create') }}" class="btn btn-success btn-sm">
+        <a href="{{ route('admin.coins.create') }}" class="btn btn-shop btn-sm">
             <i class="bi bi-plus-lg"></i> Добавить монету
         </a>
     </div>

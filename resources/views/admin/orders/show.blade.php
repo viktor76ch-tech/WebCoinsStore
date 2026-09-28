@@ -59,7 +59,7 @@
                                 <option value="{{ $key }}" @selected($order->status === $key)>{{ $label }}</option>
                             @endforeach
                         </select>
-                        <button class="btn btn-primary w-100">Обновить статус</button>
+                        <button class="btn btn-shop w-100">Обновить статус</button>
                     </form>
                 </div>
             </div>

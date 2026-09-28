@@ -18,7 +18,7 @@
         <div class="d-flex justify-content-center gap-2 mt-3">
             <form method="POST" action="{{ route('payment.pay', $order) }}">
                 @csrf
-                <button class="btn btn-success btn-lg">Оплатить</button>
+                <button class="btn btn-shop btn-lg">Оплатить</button>
             </form>
             <form method="POST" action="{{ route('payment.cancel', $order) }}"
                   onsubmit="return confirm('Отменить заказ?')">

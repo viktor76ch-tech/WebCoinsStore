@@ -9,7 +9,15 @@ class CoinController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Coin::query()->orderByDesc('created_at');
+        $query = Coin::query()
+            ->with('category')
+            ->orderByDesc('created_at');
+
+        if ($request->filled('category')) {
+            $query->whereHas('category', function ($q) use ($request) {
+                $q->where('slug', $request->input('category'));
+            });
+        }
 
         if ($request->filled('country')) {
             $query->where('country', $request->input('country'));
@@ -37,20 +45,21 @@ class CoinController extends Controller
 
         $coins = $query->paginate(12)->withQueryString();
 
-
         $countries = Coin::query()
-            ->select('country')
-            ->distinct()
-            ->orderBy('country')
-            ->pluck('country');
+            ->select('country')->distinct()->orderBy('country')->pluck('country');
 
         $conditions = Coin::query()
-            ->select('condition')
-            ->distinct()
-            ->orderBy('condition')
-            ->pluck('condition');
+            ->select('condition')->distinct()->orderBy('condition')->pluck('condition');
 
-        return view('coins.index', compact('coins', 'countries', 'conditions'));
+        $categories = \App\Models\Category::orderBy('sort_order')->get();
+
+        $currentCategory = $request->filled('category')
+            ? $categories->firstWhere('slug', $request->input('category'))
+            : null;
+
+        return view('coins.index', compact(
+            'coins', 'countries', 'conditions', 'categories', 'currentCategory'
+        ));
     }
 
     public function show(Coin $coin)

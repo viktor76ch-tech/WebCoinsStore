@@ -14,6 +14,7 @@ class UpdateCoinRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'category_id' => 'nullable|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:2000',
             'price' => 'required|numeric|min:0',

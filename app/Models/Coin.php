@@ -11,6 +11,7 @@ class Coin extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'category_id',   // ← добавили
         'title',
         'description',
         'price',
@@ -27,11 +28,15 @@ class Coin extends Model
         'year' => 'integer',
     ];
 
+    public function category()   // ← добавили
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
-
 
     public function isAvailable(): bool
     {
