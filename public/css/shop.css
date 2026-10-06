@@ -126,3 +126,17 @@ a:hover {
     border-color: #5A3E2B;
     color: #fff;
 }
+.pagination .page-link {
+    color: var(--shop-primary);
+    border-color: var(--shop-border);
+}
+.pagination .page-link:hover {
+    background-color: var(--shop-primary);
+    color: #fff;
+    border-color: var(--shop-primary);
+}
+.pagination .page-item.active .page-link {
+    background-color: var(--shop-primary);
+    border-color: var(--shop-primary);
+    color: #fff;
+}
