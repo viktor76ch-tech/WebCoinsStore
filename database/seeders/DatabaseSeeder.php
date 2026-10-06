@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
         // Сначала категории
         $this->call(CategorySeeder::class);
 
+        $this->call(CategorySeeder::class);
+
+        $cat = \App\Models\Category::pluck('id', 'slug');
+
         // Администратор
         $admin = User::create([
             'name' => 'Admin',
@@ -34,7 +38,7 @@ class DatabaseSeeder extends Seeder
         // Монеты
         $coins = [
             [
-                'category_id' => 1, // Царская Россия
+                'category_id' => $cat['tsarskaya-rossiya'],
                 'title' => '1 рубль 1898 года',
                 'description' => 'Серебряный рубль Николая II. Отличная сохранность.',
                 'price' => 12500.00,
@@ -46,7 +50,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => null,
             ],
             [
-                'category_id' => 1, // Царская Россия
+                'category_id' => $cat['tsarskaya-rossiya'],
                 'title' => '5 копеек 1789 года',
                 'description' => 'Медная монета Екатерины II.',
                 'price' => 3200.00,
@@ -58,7 +62,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => null,
             ],
             [
-                'category_id' => 6, // Иностранные монеты
+                'category_id' => $cat['inostrannye'],
                 'title' => '10 марок 1913 года',
                 'description' => 'Золотая монета Германской империи.',
                 'price' => 45000.00,
@@ -70,7 +74,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => null,
             ],
             [
-                'category_id' => 6, // Иностранные монеты
+                'category_id' => $cat['inostrannye'],
                 'title' => '1 доллар 1922 года (Morgan)',
                 'description' => 'Серебряный доллар США, тип Morgan.',
                 'price' => 8700.00,
@@ -82,7 +86,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => null,
             ],
             [
-                'category_id' => 6, // Иностранные монеты
+                'category_id' => $cat['inostrannye'],
                 'title' => '20 франков 1855 года',
                 'description' => 'Золотая монета Франции, Наполеон III.',
                 'price' => 52000.00,
@@ -94,7 +98,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => null,
             ],
             [
-                'category_id' => 1, // Царская Россия
+                'category_id' => $cat['tsarskaya-rossiya'],
                 'title' => '2 копейки 1810 года',
                 'description' => 'Медная монета Александра I.',
                 'price' => 1800.00,
@@ -106,7 +110,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => null,
             ],
             [
-                'category_id' => 1, // Царская Россия
+                'category_id' => $cat['tsarskaya-rossiya'],
                 'title' => '5 рублей 1900 года',
                 'description' => 'Золотая монета Николая II.',
                 'price' => 68000.00,
@@ -118,7 +122,7 @@ class DatabaseSeeder extends Seeder
                 'image_url' => null,
             ],
             [
-                'category_id' => 6, // Иностранные монеты
+                'category_id' => $cat['inostrannye'],
                 'title' => '1 крона 1897 года',
                 'description' => 'Серебряная монета Австро-Венгрии.',
                 'price' => 2900.00,

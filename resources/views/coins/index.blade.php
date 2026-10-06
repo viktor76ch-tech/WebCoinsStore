@@ -14,15 +14,32 @@
                 <div class="list-group list-group-flush">
                     <a href="{{ route('coins.index', request()->except('category')) }}"
                        class="list-group-item list-group-item-action
-                              {{ !request('category') ? 'active' : '' }}">
+              {{ !request('category') ? 'active' : '' }}">
                         Все монеты
                     </a>
+
                     @foreach($categories as $category)
+                        @php
+                            $isActive = request('category') === $category->slug;
+                            $childActive = $category->children->contains('slug', request('category'));
+                            $expanded = $isActive || $childActive;
+                        @endphp
+
                         <a href="{{ route('coins.index', array_merge(request()->except('category'), ['category' => $category->slug])) }}"
                            class="list-group-item list-group-item-action
-                                  {{ request('category') === $category->slug ? 'active' : '' }}">
+                  {{ $isActive ? 'active' : '' }}">
                             {{ $category->name }}
                         </a>
+
+                        @if($category->children->isNotEmpty() && $expanded)
+                            @foreach($category->children as $child)
+                                <a href="{{ route('coins.index', array_merge(request()->except('category'), ['category' => $child->slug])) }}"
+                                   class="list-group-item list-group-item-action ps-4
+                          {{ request('category') === $child->slug ? 'active' : '' }}">
+                                    <span class="text-muted me-1">↳</span> {{ $child->name }}
+                                </a>
+                            @endforeach
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -32,7 +49,18 @@
         <div class="col-12 col-lg-9">
 
             <h1 class="h3 mb-3">
-                {{ $currentCategory ? $currentCategory->name : 'Каталог монет' }}
+                @if($currentCategory)
+                    @if($currentCategory->parent)
+                        <a href="{{ route('coins.index', ['category' => $currentCategory->parent->slug]) }}"
+                           class="text-decoration-none text-muted">
+                            {{ $currentCategory->parent->name }}
+                        </a>
+                        <span class="text-muted">→</span>
+                    @endif
+                    {{ $currentCategory->name }}
+                @else
+                    Каталог монет
+                @endif
             </h1>
 
             {{-- ФИЛЬТРЫ --}}

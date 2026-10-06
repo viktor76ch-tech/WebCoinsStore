@@ -9,10 +9,15 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug', 'sort_order'];
+    protected $fillable = ['name', 'slug', 'sort_order', 'parent_id'];
 
-    public function coins()
+    public function parent()
     {
-        return $this->hasMany(Coin::class);
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id')->orderBy('sort_order');
     }
 }

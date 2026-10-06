@@ -30,6 +30,13 @@
                         <dt class="col-4 text-muted">Категория</dt>
                         <dd class="col-8">
                             @if($coin->category)
+                                @if($coin->category->parent)
+                                    <a href="{{ route('coins.index', ['category' => $coin->category->parent->slug]) }}"
+                                       class="text-decoration-none">
+                                        {{ $coin->category->parent->name }}
+                                    </a>
+                                    <span class="text-muted">→</span>
+                                @endif
                                 <a href="{{ route('coins.index', ['category' => $coin->category->slug]) }}"
                                    class="text-decoration-none">
                                     {{ $coin->category->name }}
@@ -38,6 +45,7 @@
                                 —
                             @endif
                         </dd>
+
 
                         <dt class="col-4 text-muted">Страна</dt>
                         <dd class="col-8">{{ $coin->country }}</dd>

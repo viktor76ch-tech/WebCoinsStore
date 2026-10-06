@@ -14,9 +14,17 @@ class CoinController extends Controller
             ->orderByDesc('created_at');
 
         if ($request->filled('category')) {
-            $query->whereHas('category', function ($q) use ($request) {
-                $q->where('slug', $request->input('category'));
-            });
+            $category = \App\Models\Category::with('children')
+                ->where('slug', $request->input('category'))
+                ->first();
+
+            if ($category) {
+                $ids = collect([$category->id])
+                    ->merge($category->children->pluck('id'))
+                    ->all();
+
+                $query->whereIn('category_id', $ids);
+            }
         }
 
         if ($request->filled('country')) {
@@ -51,10 +59,13 @@ class CoinController extends Controller
         $conditions = Coin::query()
             ->select('condition')->distinct()->orderBy('condition')->pluck('condition');
 
-        $categories = \App\Models\Category::orderBy('sort_order')->get();
+        $categories = \App\Models\Category::with('children')
+            ->whereNull('parent_id')
+            ->orderBy('sort_order')
+            ->get();
 
         $currentCategory = $request->filled('category')
-            ? $categories->firstWhere('slug', $request->input('category'))
+            ? \App\Models\Category::where('slug', $request->input('category'))->first()
             : null;
 
         return view('coins.index', compact(
