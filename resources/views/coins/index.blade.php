@@ -95,11 +95,21 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-6 col-md-2">
+                    <div class="col-12 col-md-2">
+                        <select name="metal" class="form-select">
+                            <option value="">Металл</option>
+                            @foreach($metals as $metal)
+                                <option value="{{ $metal }}" @selected(request('metal') === $metal)>
+                                    {{ $metal }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-1">
                         <input type="number" name="year_from" placeholder="Год от"
                                value="{{ request('year_from') }}" class="form-control">
                     </div>
-                    <div class="col-6 col-md-2">
+                    <div class="col-6 col-md-1">
                         <input type="number" name="year_to" placeholder="Год до"
                                value="{{ request('year_to') }}" class="form-control">
                     </div>
@@ -108,7 +118,7 @@
                     </div>
                 </div>
 
-                @if(request()->anyFilled(['search', 'country', 'condition', 'year_from', 'year_to']))
+                @if(request()->anyFilled(['search', 'country', 'condition', 'metal', 'year_from', 'year_to']))
                     <div class="mt-2">
                         <a href="{{ route('coins.index', request()->only('category')) }}" class="small">
                             Сбросить фильтры
@@ -127,7 +137,7 @@
                             <div class="ratio ratio-4x3 bg-light">
                                 @if($coin->image_url)
                                     <img src="{{ $coin->image_url }}" alt="{{ $coin->title }}"
-                                         class="object-fit-cover">
+                                         class="object-fit-contain">
                                 @else
                                     <div class="d-flex align-items-center justify-content-center text-muted">
                                         Нет фото
@@ -146,9 +156,12 @@
                                 @endif
 
                                 <h5 class="card-title h6 mt-1">{{ $coin->title }}</h5>
-                                <p class="card-text small text-muted mb-2">
-                                    {{ $coin->country }}, {{ $coin->year }} · {{ $coin->condition }}
-                                </p>
+                                    <p class="card-text small text-muted mb-2">
+                                        {{ $coin->country }}, {{ $coin->year }} · {{ $coin->condition }}
+                                        @if($coin->metal)
+                                            · {{ $coin->metal }}
+                                        @endif
+                                    </p>
                                 <div class="mt-auto d-flex justify-content-between align-items-center">
                                     <span class="fw-bold">{{ number_format($coin->price, 0, '.', ' ') }} ₽</span>
                                     <a href="{{ route('coins.show', $coin) }}" class="btn btn-sm btn-shop">

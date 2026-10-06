@@ -56,6 +56,9 @@
                         <dt class="col-4 text-muted">Состояние</dt>
                         <dd class="col-8">{{ $coin->condition }}</dd>
 
+                        <dt class="col-4 text-muted">Металл</dt>
+                        <dd class="col-8">{{ $coin->metal ?? '—' }}</dd>
+
                         <dt class="col-4 text-muted">Наличие</dt>
                         <dd class="col-8">
                             @if($coin->status === 'reserved')

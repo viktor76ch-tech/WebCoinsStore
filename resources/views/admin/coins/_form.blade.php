@@ -38,11 +38,32 @@
     </div>
 
     {{-- Состояние --}}
-    <div class="col-md-6">
+    <div class="col-md-3">
         <label class="form-label">Состояние</label>
         <input type="text" name="condition" value="{{ $val('condition') }}"
                placeholder="VF, XF, AU…" class="form-control">
         @error('condition')<div class="text-danger small">{{ $message }}</div>@enderror
+    </div>
+
+    {{-- Металл --}}
+    <div class="col-md-3">
+        <label class="form-label">Металл</label>
+        <input type="text" name="metal" value="{{ $val('metal') }}"
+               placeholder="Серебро, Золото, Медь…" class="form-control"
+               list="metal-suggestions">
+        <datalist id="metal-suggestions">
+            <option value="Серебро">
+            <option value="Золото">
+            <option value="Медь">
+            <option value="Бронза">
+            <option value="Латунь">
+            <option value="Никель">
+            <option value="Биметалл">
+            <option value="Сталь">
+            <option value="Платина">
+            <option value="Палладий">
+        </datalist>
+        @error('metal')<div class="text-danger small">{{ $message }}</div>@enderror
     </div>
 
     {{-- Название --}}
@@ -99,10 +120,24 @@
 
     {{-- URL картинки --}}
     <div class="col-md-6">
-        <label class="form-label">URL картинки</label>
-        <input type="url" name="image_url" value="{{ $val('image_url') }}"
-               placeholder="https://example.com/coin.jpg" class="form-control">
-        @error('image_url')<div class="text-danger small">{{ $message }}</div>@enderror
+        <label class="form-label">Путь к фото</label>
+
+        @if($isEdit && $coin->image_url)
+            <div class="mb-2">
+                <img src="{{ $coin->image_url }}" alt="{{ $coin->title }}"
+                     style="max-height:100px; max-width:100%; border-radius:6px;">
+            </div>
+        @endif
+
+        <input type="file" name="image_file" accept="image/*" class="form-control">
+        @error('image_file')<div class="text-danger small">{{ $message }}</div>@enderror
+
+        <div class="form-text">
+            JPG, PNG, WEBP. Максимум 4 МБ.
+            @if($isEdit && $coin->image_url)
+                <br>Оставь пустым, чтобы сохранить текущее фото.
+            @endif
+        </div>
     </div>
 
 </div>

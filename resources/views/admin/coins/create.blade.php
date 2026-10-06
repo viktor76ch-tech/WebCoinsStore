@@ -3,7 +3,7 @@
 @section('title', 'Новая монета')
 
 @section('content')
-    <form method="POST" action="{{ route('admin.coins.store') }}" class="card p-4">
+    <form method="POST" action="{{ route('admin.coins.store') }}" class="card p-4" enctype="multipart/form-data">
         @csrf
         @include('admin.coins._form', ['coin' => null])
 

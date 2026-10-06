@@ -3,7 +3,7 @@
 @section('title', 'Редактирование: ' . $coin->title)
 
 @section('content')
-    <form method="POST" action="{{ route('admin.coins.update', $coin) }}" class="card p-4">
+    <form method="POST" action="{{ route('admin.coins.update', $coin) }}" class="card p-4" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         @include('admin.coins._form', ['coin' => $coin])

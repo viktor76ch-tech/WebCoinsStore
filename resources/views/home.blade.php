@@ -51,7 +51,7 @@
                         <div class="ratio ratio-4x3 bg-light">
                             @if($coin->image_url)
                                 <img src="{{ $coin->image_url }}" alt="{{ $coin->title }}"
-                                     class="object-fit-cover">
+                                     class="object-fit-contain">
                             @else
                                 <div class="d-flex align-items-center justify-content-center text-muted">Нет фото</div>
                             @endif

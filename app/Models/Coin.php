@@ -19,6 +19,7 @@ class Coin extends Model
         'year',
         'country',
         'condition',
+        'metal',
         'status',
         'image_url',
     ];
@@ -59,5 +60,20 @@ class Coin extends Model
             $this->status = 'available';
         }
         $this->save();
+    }
+
+    public function getImageUrlAttribute($value)
+    {
+        if (!$value) {
+            return null;
+        }
+
+
+        if (str_starts_with($value, 'http')) {
+            return $value;
+        }
+
+
+        return asset('storage/' . $value);
     }
 }

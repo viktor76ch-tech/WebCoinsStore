@@ -36,13 +36,21 @@ class CoinController extends Controller
     {
         $data = $request->validated();
 
+        if ($request->hasFile('image_file')) {
+            $data['image_url'] = $request->file('image_file')
+                ->store('coins', 'public');
+        }
+
+        unset($data['image_file']);
+
         if ((int) $data['quantity'] === 0) {
             $data['status'] = 'sold';
         }
 
         Coin::create($data);
 
-        return redirect()->route('admin.coins.index')->with('success', 'Монета добавлена.');
+        return redirect()->route('admin.coins.index')
+            ->with('success', 'Монета добавлена.');
     }
 
     public function edit(Coin $coin)
@@ -54,6 +62,17 @@ class CoinController extends Controller
     {
         $data = $request->validated();
 
+        if ($request->hasFile('image_file')) {
+            if ($coin->image_url && !str_starts_with($coin->image_url, 'http')) {
+                \Storage::disk('public')->delete($coin->getRawOriginal('image_url'));
+            }
+
+            $data['image_url'] = $request->file('image_file')
+                ->store('coins', 'public');
+        }
+
+        unset($data['image_file']);
+
         if ((int) $data['quantity'] === 0) {
             $data['status'] = 'sold';
         } elseif ($data['status'] === 'sold' && (int) $data['quantity'] > 0) {
@@ -62,7 +81,8 @@ class CoinController extends Controller
 
         $coin->update($data);
 
-        return redirect()->route('admin.coins.index')->with('success', 'Монета обновлена.');
+        return redirect()->route('admin.coins.index')
+            ->with('success', 'Монета обновлена.');
     }
 
     public function destroy(Coin $coin)

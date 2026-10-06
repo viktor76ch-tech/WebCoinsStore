@@ -35,6 +35,10 @@ class CoinController extends Controller
             $query->where('condition', $request->input('condition'));
         }
 
+        if ($request->filled('metal')) {
+            $query->where('metal', $request->input('metal'));
+        }
+
         if ($request->filled('year_from')) {
             $query->where('year', '>=', (int) $request->input('year_from'));
         }
@@ -59,6 +63,13 @@ class CoinController extends Controller
         $conditions = Coin::query()
             ->select('condition')->distinct()->orderBy('condition')->pluck('condition');
 
+        $metals = Coin::query()
+            ->select('metal')
+            ->whereNotNull('metal')
+            ->distinct()
+            ->orderBy('metal')
+            ->pluck('metal');
+
         $categories = \App\Models\Category::with('children')
             ->whereNull('parent_id')
             ->orderBy('sort_order')
@@ -69,7 +80,7 @@ class CoinController extends Controller
             : null;
 
         return view('coins.index', compact(
-            'coins', 'countries', 'conditions', 'categories', 'currentCategory'
+            'coins', 'countries', 'conditions', 'metals', 'categories', 'currentCategory'
         ));
     }
 

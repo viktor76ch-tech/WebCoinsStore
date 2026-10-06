@@ -22,8 +22,9 @@ class StoreCoinRequest extends FormRequest
             'year' => 'required|integer|min:1000|max:2100',
             'country' => 'required|string|max:100',
             'condition' => 'required|string|max:50',
+            'metal' => 'nullable|string|max:50',
             'status' => 'required|in:available,reserved,sold',
-            'image_url' => 'nullable|url|max:500',
+            'image_file' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         ];
     }
 }
