@@ -20,4 +20,9 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id')->orderBy('sort_order');
     }
+
+    public function coins()
+    {
+        return $this->hasMany(Coin::class);
+    }
 }

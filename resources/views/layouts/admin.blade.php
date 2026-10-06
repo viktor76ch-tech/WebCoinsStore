@@ -41,6 +41,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}"
+                       href="{{ route('admin.categories.index') }}">
+                        <i class="bi bi-diagram-3"></i> Категории
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('admin.coins.*') ? 'active' : '' }}"
                        href="{{ route('admin.coins.index') }}">
                         <i class="bi bi-coin"></i> Монеты

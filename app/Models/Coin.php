@@ -11,7 +11,7 @@ class Coin extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'category_id',   // ← добавили
+        'category_id',
         'title',
         'description',
         'price',
@@ -28,7 +28,7 @@ class Coin extends Model
         'year' => 'integer',
     ];
 
-    public function category()   // ← добавили
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }
